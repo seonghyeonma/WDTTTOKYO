@@ -536,6 +536,244 @@
     background-size: 10px;
   }
 
+  /* ─── EXPENSE SPLITTING ─── */
+  .expense-form {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  .expense-form label {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+    margin-top: 12px;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+  }
+
+  .expense-form label:first-child { margin-top: 0; }
+
+  .expense-form input,
+  .expense-form select {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border-light);
+    border-radius: var(--r-sm);
+    padding: 10px 12px;
+    font-size: 13px;
+    color: var(--text);
+    font-family: inherit;
+    outline: none;
+    transition: border-color .2s;
+  }
+
+  .expense-form input:focus,
+  .expense-form select:focus {
+    border-color: var(--accent);
+  }
+
+  .expense-form select { appearance: none; cursor: pointer; }
+  .expense-form select option { background: var(--bg); color: var(--text); }
+
+  .member-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .member-chip {
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 500;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border-light);
+    color: var(--text-sub);
+    cursor: pointer;
+    transition: all .2s;
+    user-select: none;
+  }
+
+  .member-chip.sel {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .btn-add-expense {
+    width: 100%;
+    margin-top: 16px;
+    padding: 12px;
+    border: none;
+    border-radius: var(--r-sm);
+    background: linear-gradient(135deg, var(--accent), #FF6B81);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity .2s;
+  }
+
+  .btn-add-expense:active { opacity: .8; }
+
+  .expense-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+
+  .expense-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 14px;
+    position: relative;
+  }
+
+  .expense-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+
+  .expense-card-title {
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .expense-card-amount {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .expense-card-meta {
+    font-size: 11px;
+    color: var(--text-dim);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .expense-card-meta span { display: flex; align-items: center; gap: 4px; }
+
+  .expense-card-split {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .split-chip {
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.04);
+    color: var(--text-dim);
+  }
+
+  .split-chip.payer {
+    background: var(--green-soft);
+    color: var(--green);
+    font-weight: 600;
+  }
+
+  .expense-card-delete {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 22px;
+    height: 22px;
+    border: none;
+    background: rgba(255,59,92,0.1);
+    color: var(--accent);
+    border-radius: 50%;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.5;
+    transition: opacity .2s;
+  }
+
+  .expense-card-delete:hover { opacity: 1; }
+
+  .settle-summary {
+    background: linear-gradient(135deg, rgba(52,199,89,0.06), rgba(255,59,92,0.04));
+    border: 1px solid rgba(52,199,89,0.15);
+    border-radius: var(--r);
+    padding: 16px;
+  }
+
+  .settle-summary h4 {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .settle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+  }
+
+  .settle-row:last-child { border-bottom: none; }
+
+  .settle-from { color: var(--text-sub); font-weight: 500; }
+  .settle-arrow { color: var(--text-muted); font-size: 10px; }
+  .settle-to { color: var(--green); font-weight: 600; }
+  .settle-amt {
+    font-family: 'DM Mono', monospace;
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .settle-empty {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 16px 0;
+  }
+
+  .expense-total-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    padding: 12px 14px;
+    margin-bottom: 16px;
+  }
+
+  .expense-total-label {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  .expense-total-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
   /* ─── EMERGENCY ─── */
   .sos-bar {
     background: linear-gradient(135deg, var(--accent), #cc2244);
@@ -601,6 +839,7 @@
   <a href="#day3">DAY 3</a>
   <a href="#transport">교통</a>
   <a href="#packing">준비물</a>
+  <a href="#expense">정산</a>
   <a href="#emergency">긴급</a>
 </nav>
 
@@ -1020,7 +1259,51 @@
     <li>포켓 와이파이 / eSIM</li>
     <li>세면도구 & 개인 위생용품</li>
     <li>카메라 / 셀카봉</li>
+    <li>돼지코 (일본 전원 어댑터)</li>
   </ul>
+</section>
+
+<div class="div"></div>
+
+<!-- ═══ EXPENSE SPLITTING ═══ -->
+<section class="sec fi" id="expense">
+  <div class="sec-label">Settlement</div>
+  <h2 class="sec-title">💰 여행 정산</h2>
+  <p class="sec-desc">결제 내역을 추가하고 정산 금액을 확인하세요</p>
+
+  <!-- Total bar -->
+  <div class="expense-total-bar">
+    <span class="expense-total-label">총 지출</span>
+    <span class="expense-total-value" id="expenseTotal">¥0</span>
+  </div>
+
+  <!-- Add expense form -->
+  <div class="expense-form" id="expenseForm">
+    <label>사용 목적</label>
+    <input type="text" id="expDesc" placeholder="예: 세븐일레븐, 저녁식사">
+
+    <label>결제 금액 (엔)</label>
+    <input type="number" id="expAmount" placeholder="2000" inputmode="numeric">
+
+    <label>결제자</label>
+    <div class="member-chips" id="payerChips"></div>
+
+    <label>정산 인원 (탭해서 선택)</label>
+    <div class="member-chips" id="splitChips"></div>
+
+    <button class="btn-add-expense" onclick="addExpense()">추가하기</button>
+  </div>
+
+  <!-- Expense list -->
+  <div class="expense-list" id="expenseList"></div>
+
+  <!-- Settlement summary -->
+  <div class="settle-summary">
+    <h4>📊 정산 요약</h4>
+    <div id="settleSummary">
+      <div class="settle-empty">아직 등록된 내역이 없어요</div>
+    </div>
+  </div>
 </section>
 
 <div class="div"></div>
@@ -1089,6 +1372,162 @@
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
   }, { threshold: 0.08 });
   document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+
+  // ─── EXPENSE SPLITTING ───
+  const MEMBERS = ['도라미','허니비','찬밥','라엘','드카츄','레베카','빠밀','오르카','라임','폭냥','가투','둥새'];
+  let expenses = JSON.parse(localStorage.getItem('tokyoExpenses') || '[]');
+  let selectedPayer = null;
+  let selectedSplit = new Set();
+
+  function saveExpenses() {
+    localStorage.setItem('tokyoExpenses', JSON.stringify(expenses));
+  }
+
+  function initChips() {
+    const payerEl = document.getElementById('payerChips');
+    const splitEl = document.getElementById('splitChips');
+    if (!payerEl || !splitEl) return;
+
+    payerEl.innerHTML = MEMBERS.map(m =>
+      `<span class="member-chip" data-member="${m}" onclick="selectPayer(this)">${m}</span>`
+    ).join('');
+
+    splitEl.innerHTML = MEMBERS.map(m =>
+      `<span class="member-chip" data-member="${m}" onclick="toggleSplit(this)">${m}</span>`
+    ).join('');
+  }
+
+  function selectPayer(el) {
+    document.querySelectorAll('#payerChips .member-chip').forEach(c => c.classList.remove('sel'));
+    el.classList.add('sel');
+    selectedPayer = el.dataset.member;
+  }
+
+  function toggleSplit(el) {
+    el.classList.toggle('sel');
+    const m = el.dataset.member;
+    if (selectedSplit.has(m)) selectedSplit.delete(m);
+    else selectedSplit.add(m);
+  }
+
+  function addExpense() {
+    const desc = document.getElementById('expDesc').value.trim();
+    const amount = parseInt(document.getElementById('expAmount').value);
+    if (!desc) return alert('사용 목적을 입력하세요');
+    if (!amount || amount <= 0) return alert('금액을 입력하세요');
+    if (!selectedPayer) return alert('결제자를 선택하세요');
+    if (selectedSplit.size === 0) return alert('정산 인원을 선택하세요');
+
+    expenses.push({
+      id: Date.now(),
+      desc,
+      amount,
+      payer: selectedPayer,
+      split: [...selectedSplit],
+      date: new Date().toLocaleDateString('ko-KR', { month:'numeric', day:'numeric' })
+    });
+
+    saveExpenses();
+    document.getElementById('expDesc').value = '';
+    document.getElementById('expAmount').value = '';
+    selectedPayer = null;
+    selectedSplit.clear();
+    document.querySelectorAll('#payerChips .member-chip, #splitChips .member-chip').forEach(c => c.classList.remove('sel'));
+    renderExpenses();
+  }
+
+  function deleteExpense(id) {
+    expenses = expenses.filter(e => e.id !== id);
+    saveExpenses();
+    renderExpenses();
+  }
+
+  function renderExpenses() {
+    const list = document.getElementById('expenseList');
+    const totalEl = document.getElementById('expenseTotal');
+    const summaryEl = document.getElementById('settleSummary');
+    if (!list) return;
+
+    // Render expense cards
+    list.innerHTML = expenses.map(e => `
+      <div class="expense-card">
+        <button class="expense-card-delete" onclick="deleteExpense(${e.id})">✕</button>
+        <div class="expense-card-header">
+          <div>
+            <div class="expense-card-title">${e.desc}</div>
+            <div class="expense-card-meta">
+              <span>💳 ${e.payer} 결제</span>
+              <span>📅 ${e.date} · 1인 ¥${Math.round(e.amount / e.split.length).toLocaleString()}</span>
+            </div>
+          </div>
+          <div class="expense-card-amount">¥${e.amount.toLocaleString()}</div>
+        </div>
+        <div class="expense-card-split">
+          ${e.split.map(m => `<span class="split-chip${m === e.payer ? ' payer' : ''}">${m}</span>`).join('')}
+        </div>
+      </div>
+    `).join('');
+
+    // Total
+    const total = expenses.reduce((s, e) => s + e.amount, 0);
+    totalEl.textContent = `¥${total.toLocaleString()}`;
+
+    // Calculate settlements
+    const balances = {};
+    MEMBERS.forEach(m => balances[m] = 0);
+
+    expenses.forEach(e => {
+      const perPerson = e.amount / e.split.length;
+      balances[e.payer] = (balances[e.payer] || 0) + e.amount;
+      e.split.forEach(m => {
+        balances[m] = (balances[m] || 0) - perPerson;
+      });
+    });
+
+    // Simplify debts
+    const debtors = [];
+    const creditors = [];
+    Object.entries(balances).forEach(([name, bal]) => {
+      if (bal > 1) creditors.push({ name, amount: bal });
+      else if (bal < -1) debtors.push({ name, amount: -bal });
+    });
+
+    debtors.sort((a, b) => b.amount - a.amount);
+    creditors.sort((a, b) => b.amount - a.amount);
+
+    const settlements = [];
+    let di = 0, ci = 0;
+    while (di < debtors.length && ci < creditors.length) {
+      const transfer = Math.min(debtors[di].amount, creditors[ci].amount);
+      if (transfer > 1) {
+        settlements.push({
+          from: debtors[di].name,
+          to: creditors[ci].name,
+          amount: Math.round(transfer)
+        });
+      }
+      debtors[di].amount -= transfer;
+      creditors[ci].amount -= transfer;
+      if (debtors[di].amount < 1) di++;
+      if (creditors[ci].amount < 1) ci++;
+    }
+
+    if (settlements.length === 0) {
+      summaryEl.innerHTML = '<div class="settle-empty">아직 등록된 내역이 없어요</div>';
+    } else {
+      summaryEl.innerHTML = settlements.map(s => `
+        <div class="settle-row">
+          <span class="settle-from">${s.from}</span>
+          <span class="settle-arrow">→</span>
+          <span class="settle-to">${s.to}</span>
+          <span class="settle-amt">¥${s.amount.toLocaleString()}</span>
+        </div>
+      `).join('');
+    }
+  }
+
+  initChips();
+  renderExpenses();
 
   // Active nav
   const secs = document.querySelectorAll('.sec[id]');
