@@ -686,26 +686,39 @@
     font-weight: 600;
   }
 
-  .expense-card-delete {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 22px;
-    height: 22px;
-    border: none;
-    background: rgba(255,59,92,0.1);
-    color: var(--accent);
-    border-radius: 50%;
-    font-size: 12px;
+  .expense-card-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+
+  .btn-expense-action {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid var(--border-light);
+    border-radius: var(--r-sm);
+    font-size: 11px;
+    font-weight: 600;
+    font-family: inherit;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0.5;
-    transition: opacity .2s;
+    gap: 4px;
+    transition: all .2s;
   }
 
-  .expense-card-delete:hover { opacity: 1; }
+  .btn-expense-delete {
+    background: rgba(255,59,92,0.06);
+    color: var(--accent);
+    border-color: rgba(255,59,92,0.2);
+  }
+
+  .btn-expense-delete:active {
+    background: rgba(255,59,92,0.15);
+  }
 
   .settle-summary {
     background: linear-gradient(135deg, rgba(52,199,89,0.06), rgba(255,59,92,0.04));
@@ -733,6 +746,51 @@
   }
 
   .settle-row:last-child { border-bottom: none; }
+
+  .settle-row {
+    cursor: pointer;
+    user-select: none;
+    transition: opacity .2s;
+  }
+
+  .settle-row.settled {
+    opacity: 0.4;
+  }
+
+  .settle-row.settled .settle-from,
+  .settle-row.settled .settle-to,
+  .settle-row.settled .settle-amt {
+    text-decoration: line-through;
+  }
+
+  .settle-check {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--text-muted);
+    border-radius: 4px;
+    flex-shrink: 0;
+    transition: all .2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+  }
+
+  .settle-row.settled .settle-check {
+    background: var(--green);
+    border-color: var(--green);
+    color: #fff;
+  }
+
+  .settle-done-label {
+    display: none;
+    font-size: 9px;
+    color: var(--green);
+    font-weight: 600;
+    letter-spacing: .5px;
+  }
+
+  .settle-row.settled .settle-done-label { display: inline; }
 
   .settle-from { color: var(--text-sub); font-weight: 500; }
   .settle-arrow { color: var(--text-muted); font-size: 10px; }
@@ -1437,6 +1495,7 @@
   }
 
   function deleteExpense(id) {
+    if (!confirm('이 내역을 삭제할까요?')) return;
     expenses = expenses.filter(e => e.id !== id);
     saveExpenses();
     renderExpenses();
@@ -1451,7 +1510,6 @@
     // Render expense cards
     list.innerHTML = expenses.map(e => `
       <div class="expense-card">
-        <button class="expense-card-delete" onclick="deleteExpense(${e.id})">✕</button>
         <div class="expense-card-header">
           <div>
             <div class="expense-card-title">${e.desc}</div>
@@ -1464,6 +1522,9 @@
         </div>
         <div class="expense-card-split">
           ${e.split.map(m => `<span class="split-chip${m === e.payer ? ' payer' : ''}">${m}</span>`).join('')}
+        </div>
+        <div class="expense-card-actions">
+          <button class="btn-expense-action btn-expense-delete" onclick="deleteExpense(${e.id})">🗑 삭제</button>
         </div>
       </div>
     `).join('');
@@ -1515,15 +1576,37 @@
     if (settlements.length === 0) {
       summaryEl.innerHTML = '<div class="settle-empty">아직 등록된 내역이 없어요</div>';
     } else {
-      summaryEl.innerHTML = settlements.map(s => `
-        <div class="settle-row">
+      const settledMap = JSON.parse(localStorage.getItem('tokyoSettled') || '{}');
+      summaryEl.innerHTML = settlements.map(s => {
+        const key = `${s.from}→${s.to}`;
+        const done = settledMap[key] ? ' settled' : '';
+        return `
+        <div class="settle-row${done}" onclick="toggleSettle(this, '${key}')">
+          <span class="settle-check">${settledMap[key] ? '✓' : ''}</span>
           <span class="settle-from">${s.from}</span>
           <span class="settle-arrow">→</span>
           <span class="settle-to">${s.to}</span>
+          <span class="settle-done-label">완료</span>
           <span class="settle-amt">¥${s.amount.toLocaleString()}</span>
-        </div>
-      `).join('');
+        </div>`;
+      }).join('');
     }
+  }
+
+  function toggleSettle(el, key) {
+    const settledMap = JSON.parse(localStorage.getItem('tokyoSettled') || '{}');
+    if (settledMap[key]) {
+      delete settledMap[key];
+      el.classList.remove('settled');
+      el.querySelector('.settle-check').textContent = '';
+      el.querySelector('.settle-done-label').style.display = 'none';
+    } else {
+      settledMap[key] = true;
+      el.classList.add('settled');
+      el.querySelector('.settle-check').textContent = '✓';
+      el.querySelector('.settle-done-label').style.display = 'inline';
+    }
+    localStorage.setItem('tokyoSettled', JSON.stringify(settledMap));
   }
 
   initChips();
