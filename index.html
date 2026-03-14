@@ -1416,16 +1416,59 @@
   }, { threshold: 0.08 });
   document.querySelectorAll('.fi').forEach(el => obs.observe(el));
 
-  // ─── EXPENSE SPLITTING ───
+  // ─── EXPENSE SPLITTING (Google Sheets 연동) ───
+  // ⚠️ 아래 URL을 본인의 Google Apps Script 웹앱 URL로 교체하세요
+  const API_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+
   const MEMBERS = ['도라미','허니비','찬밥','라엘','드카츄','레베카','빠밀','오르카','라임','폭냥','가투','둥새'];
-  let expenses = JSON.parse(localStorage.getItem('tokyoExpenses') || '[]');
+  let expenses = [];
   let selectedPayer = null;
   let selectedSplit = new Set();
+  let isLoading = false;
 
-  function saveExpenses() {
-    localStorage.setItem('tokyoExpenses', JSON.stringify(expenses));
+  // ── API 호출 ──
+  async function fetchExpenses() {
+    if (API_URL.includes('YOUR_GOOGLE')) {
+      expenses = JSON.parse(localStorage.getItem('tokyoExpenses') || '[]');
+      renderExpenses();
+      return;
+    }
+    try {
+      isLoading = true;
+      renderLoading();
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      expenses = data.expenses || [];
+      localStorage.setItem('tokyoExpenses', JSON.stringify(expenses));
+    } catch (err) {
+      console.warn('API 실패, localStorage 사용:', err);
+      expenses = JSON.parse(localStorage.getItem('tokyoExpenses') || '[]');
+    } finally {
+      isLoading = false;
+      renderExpenses();
+    }
   }
 
+  async function apiPost(body) {
+    localStorage.setItem('tokyoExpenses', JSON.stringify(expenses));
+    if (API_URL.includes('YOUR_GOOGLE')) return;
+    try {
+      await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(body)
+      });
+    } catch (err) {
+      console.warn('API 저장 실패 (로컬에는 저장됨):', err);
+    }
+  }
+
+  function renderLoading() {
+    const list = document.getElementById('expenseList');
+    if (list) list.innerHTML = '<div style="text-align:center;padding:20px;color:#777;font-size:12px">불러오는 중...</div>';
+  }
+
+  // ── UI ──
   function initChips() {
     const payerEl = document.getElementById('payerChips');
     const splitEl = document.getElementById('splitChips');
@@ -1453,7 +1496,7 @@
     else selectedSplit.add(m);
   }
 
-  function addExpense() {
+  async function addExpense() {
     const desc = document.getElementById('expDesc').value.trim();
     const amount = parseInt(document.getElementById('expAmount').value);
     if (!desc) return alert('사용 목적을 입력하세요');
@@ -1461,38 +1504,41 @@
     if (!selectedPayer) return alert('결제자를 선택하세요');
     if (selectedSplit.size === 0) return alert('정산 인원을 선택하세요');
 
-    expenses.push({
+    const exp = {
       id: Date.now(),
       desc,
       amount,
       payer: selectedPayer,
       split: [...selectedSplit],
-      date: new Date().toLocaleDateString('ko-KR', { month:'numeric', day:'numeric' })
-    });
+      date: new Date().toLocaleDateString('ko-KR', { month:'numeric', day:'numeric' }),
+      settled: false
+    };
 
-    saveExpenses();
+    expenses.push(exp);
+    renderExpenses();
+    await apiPost({ action: 'add', expense: exp });
+
     document.getElementById('expDesc').value = '';
     document.getElementById('expAmount').value = '';
     selectedPayer = null;
     selectedSplit.clear();
     document.querySelectorAll('#payerChips .member-chip, #splitChips .member-chip').forEach(c => c.classList.remove('sel'));
-    renderExpenses();
   }
 
-  function toggleSettleExpense(id) {
+  async function toggleSettleExpense(id) {
     const exp = expenses.find(e => e.id === id);
     if (exp) {
       exp.settled = !exp.settled;
-      saveExpenses();
       renderExpenses();
+      await apiPost({ action: 'settle', id });
     }
   }
 
-  function deleteExpense(id) {
+  async function deleteExpense(id) {
     if (!confirm('이 내역을 삭제할까요?')) return;
     expenses = expenses.filter(e => e.id !== id);
-    saveExpenses();
     renderExpenses();
+    await apiPost({ action: 'delete', id });
   }
 
   function renderExpenses() {
@@ -1582,9 +1628,8 @@
     }
   }
 
-
   initChips();
-  renderExpenses();
+  fetchExpenses();
 
   // Active nav
   const secs = document.querySelectorAll('.sec[id]');
