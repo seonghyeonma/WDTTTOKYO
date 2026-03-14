@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Tokyo 2025 Travel Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A0A0A;
+    --bg-card: #141414;
+    --bg-card-hover: #1A1A1A;
+    --accent: #FF3B5C;
+    --accent-soft: rgba(255,59,92,0.10);
+    --sakura: #FFB7C5;
+    --sakura-soft: rgba(255,183,197,0.08);
+    --gold: #D4A843;
+    --gold-soft: rgba(212,168,67,0.10);
+    --green: #34C759;
+    --green-soft: rgba(52,199,89,0.10);
+    --orange: #FF9500;
+    --orange-soft: rgba(255,149,0,0.10);
+    --text: #EDEDED;
+    --text-sub: #B0B0B0;
+    --text-dim: #777;
+    --text-muted: #444;
+    --border: rgba(255,255,255,0.06);
+    --border-light: rgba(255,255,255,0.10);
+    --r: 14px;
+    --r-sm: 10px;
+    --max-w: 430px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #000;
+    color: var(--text);
+    min-height: 100dvh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* ─── MOBILE FRAME ─── */
+  .mobile-wrap {
+    width: 100%;
+    max-width: var(--max-w);
+    background: var(--bg);
+    min-height: 100dvh;
+    position: relative;
+    box-shadow: 0 0 80px rgba(255,59,92,0.05);
+  }
+
+  @media (min-width: 431px) {
+    body { padding: 20px 0; align-items: flex-start; }
+    .mobile-wrap {
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,0.08);
+      overflow: hidden;
+      min-height: calc(100vh - 40px);
+    }
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    height: 100dvh;
+    max-height: 780px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 24px 44px;
+    overflow: hidden;
+  }
+
+  @media (max-width: 430px) {
+    .hero { max-height: none; height: 100dvh; }
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 90% 50% at 50% 15%, rgba(255,59,92,0.12), transparent 55%),
+      radial-gradient(ellipse 50% 40% at 85% 65%, rgba(255,183,197,0.06), transparent 45%),
+      linear-gradient(180deg, transparent 50%, var(--bg) 100%);
+    z-index: 1;
+  }
+
+  .hero-kanji {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -55%);
+    font-size: clamp(140px, 35vw, 260px);
+    font-weight: 900;
+    color: rgba(255,255,255,0.018);
+    letter-spacing: -6px;
+    white-space: nowrap;
+    user-select: none;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  .hero-content { position: relative; z-index: 2; }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+    opacity: 0; animation: fadeUp .7s .2s forwards;
+  }
+
+  .hero-title {
+    font-weight: 900;
+    font-size: clamp(36px, 10vw, 52px);
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+    opacity: 0; animation: fadeUp .7s .35s forwards;
+  }
+
+  .hero-title .sakura { color: var(--sakura); }
+
+  .hero-sub {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-sub);
+    line-height: 1.65;
+    max-width: 300px;
+    opacity: 0; animation: fadeUp .7s .5s forwards;
+  }
+
+  .hero-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    opacity: 0; animation: fadeUp .7s .65s forwards;
+  }
+
+  .chip {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 7px 14px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-sub);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .chip strong { color: var(--text); font-weight: 700; }
+
+  .scroll-cue {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    opacity: 0; animation: fadeUp .7s 1s forwards;
+  }
+
+  .scroll-cue .line {
+    width: 1px; height: 28px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    margin: 0 auto;
+    animation: pulse 2s infinite;
+  }
+
+  /* ─── STICKY NAV ─── */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,10,0.88);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0 4px;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+
+  .nav a {
+    flex-shrink: 0;
+    padding: 13px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: all .25s;
+    white-space: nowrap;
+  }
+  .nav a.active, .nav a:hover { color: var(--text); border-bottom-color: var(--accent); }
+
+  /* ─── SECTION ─── */
+  .sec { padding: 40px 20px 28px; }
+
+  .sec-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .sec-title {
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: -0.3px;
+    margin-bottom: 6px;
+  }
+
+  .sec-desc {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin-bottom: 28px;
+  }
+
+  /* ─── DAY HEADER ─── */
+  .day-hdr {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .day-badge {
+    width: 48px; height: 48px;
+    border-radius: 13px;
+    background: linear-gradient(135deg, var(--accent), #FF6B81);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-weight: 900; font-size: 18px; line-height: 1;
+    flex-shrink: 0;
+  }
+  .day-badge small { font-size: 8px; font-weight: 600; letter-spacing: 1px; opacity: .8; margin-top: 2px; }
+
+  .day-meta h3 { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+  .day-meta p { font-size: 11px; color: var(--text-dim); font-weight: 400; }
+
+  /* ─── TIMELINE ─── */
+  .tl { position: relative; padding-left: 22px; }
+
+  .tl::before {
+    content: '';
+    position: absolute;
+    left: 4px; top: 8px; bottom: 8px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent), var(--border) 30%, var(--border) 70%, var(--sakura));
+  }
+
+  .tl-item { position: relative; padding-bottom: 24px; }
+  .tl-item:last-child { padding-bottom: 0; }
+
+  .tl-dot {
+    position: absolute;
+    left: -19.5px; top: 5px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--text-muted);
+    z-index: 1;
+    transition: all .3s;
+  }
+
+  .tl-item.hl .tl-dot {
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 10px rgba(255,59,92,0.35);
+  }
+
+  .tl-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: .3px;
+    margin-bottom: 3px;
+    font-weight: 400;
+  }
+
+  .tl-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 3px;
+    line-height: 1.35;
+  }
+
+  .tl-loc {
+    font-size: 11px;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin-bottom: 4px;
+    font-weight: 400;
+  }
+  .tl-loc::before { content: '📍'; font-size: 10px; }
+
+  .tl-note {
+    font-size: 11px;
+    color: var(--text-dim);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    padding: 7px 10px;
+    margin-top: 5px;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+  .tl-note::before { content: '💡 '; font-size: 10px; }
+
+  /* ─── RESTAURANT CARD ─── */
+  .resto-card {
+    margin-top: 8px;
+    background: linear-gradient(135deg, rgba(255,149,0,0.06), rgba(255,59,92,0.04));
+    border: 1px solid rgba(255,149,0,0.15);
+    border-radius: var(--r);
+    padding: 12px 14px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .resto-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--orange);
+    border-radius: 3px 0 0 3px;
+  }
+
+  .resto-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+
+  .resto-tag.reserved {
+    background: var(--green-soft);
+    color: var(--green);
+  }
+
+  .resto-tag.undecided {
+    background: var(--orange-soft);
+    color: var(--orange);
+  }
+
+  .resto-tag.onsite {
+    background: rgba(255,255,255,0.06);
+    color: var(--text-dim);
+  }
+
+  .resto-name {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .resto-name-jp {
+    font-size: 10px;
+    color: var(--text-dim);
+    font-weight: 400;
+    margin-bottom: 6px;
+  }
+
+  .resto-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .resto-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    font-size: 11px;
+  }
+
+  .resto-row-label {
+    color: var(--text-muted);
+    font-weight: 500;
+    flex-shrink: 0;
+    min-width: 42px;
+  }
+
+  .resto-row-value {
+    color: var(--text-sub);
+    font-weight: 400;
+  }
+
+  .resto-options {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+
+  .resto-option {
+    font-size: 11px;
+    color: var(--text-dim);
+    padding: 4px 0;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  .resto-option-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--text-muted);
+    border: 1px solid var(--text-muted);
+    border-radius: 3px;
+    padding: 1px 4px;
+    flex-shrink: 0;
+  }
+
+  /* ─── TRANSPORT BADGE ─── */
+  .t-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--gold-soft);
+    border: 1px solid rgba(212,168,67,0.18);
+    color: var(--gold);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 4px 9px;
+    border-radius: 16px;
+    margin-top: 4px;
+  }
+
+  /* ─── INFO GRID ─── */
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .info-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 14px;
+  }
+  .info-card.full { grid-column: 1 / -1; }
+
+  .info-card-icon { font-size: 22px; margin-bottom: 6px; }
+  .info-card-label { font-size: 10px; color: var(--text-dim); margin-bottom: 3px; font-weight: 400; }
+  .info-card-value { font-size: 13px; font-weight: 700; line-height: 1.4; }
+
+  /* ─── TIP BOX ─── */
+  .tip {
+    background: var(--sakura-soft);
+    border: 1px solid rgba(255,183,197,0.12);
+    border-radius: var(--r);
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+  .tip-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--sakura);
+    margin-bottom: 5px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .tip p { font-size: 11px; color: var(--text-dim); line-height: 1.65; font-weight: 400; }
+
+  /* ─── CHECKLIST ─── */
+  .cl { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+
+  .cl li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-sub);
+    line-height: 1.5;
+    padding: 10px 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    cursor: pointer;
+    transition: all .2s;
+    user-select: none;
+  }
+
+  .cl li::before {
+    content: '';
+    width: 17px; height: 17px;
+    border: 2px solid var(--text-muted);
+    border-radius: 5px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: all .2s;
+  }
+
+  .cl li.checked {
+    color: var(--text-muted);
+    text-decoration: line-through;
+  }
+
+  .cl li.checked::before {
+    background: var(--accent);
+    border-color: var(--accent);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 10px;
+  }
+
+  /* ─── EMERGENCY ─── */
+  .sos-bar {
+    background: linear-gradient(135deg, var(--accent), #cc2244);
+    padding: 13px 20px;
+    display: flex; align-items: center; gap: 10px;
+    cursor: pointer;
+  }
+  .sos-bar-text { font-size: 12px; font-weight: 700; flex: 1; }
+  .sos-bar-arrow { font-size: 16px; opacity: .7; }
+
+  .sos-panel { max-height: 0; overflow: hidden; transition: max-height .35s ease; background: var(--bg-card); }
+  .sos-panel.open { max-height: 500px; }
+
+  .sos-inner { padding: 16px 20px; display: flex; flex-direction: column; gap: 10px; }
+
+  .sos-item { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .sos-item:last-child { border-bottom: none; }
+  .sos-item-icon { font-size: 20px; flex-shrink: 0; }
+  .sos-item-label { font-size: 10px; color: var(--text-dim); margin-bottom: 1px; font-weight: 400; }
+  .sos-item-value { font-size: 13px; font-weight: 700; }
+  .sos-item a { color: var(--accent); text-decoration: none; font-size: 13px; font-weight: 700; }
+
+  /* ─── FOOTER ─── */
+  .foot { text-align: center; padding: 36px 20px 52px; border-top: 1px solid var(--border); }
+  .foot-emoji { font-size: 28px; margin-bottom: 10px; }
+  .foot p { font-size: 11px; color: var(--text-muted); line-height: 1.6; font-weight: 400; }
+
+  /* ─── DIVIDER ─── */
+  .div { height: 1px; background: var(--border); margin: 0 20px; }
+
+  /* ─── ANIM ─── */
+  @keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes pulse { 0%,100% { opacity:.25; } 50% { opacity:1; } }
+
+  .fi { opacity:0; transform:translateY(18px); transition: opacity .5s, transform .5s; }
+  .fi.vis { opacity:1; transform:translateY(0); }
+</style>
+</head>
+<body>
+<div class="mobile-wrap">
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-kanji">東京</div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">2025. 3. 20 — 3. 22</div>
+    <h1 class="hero-title">도쿄 <span class="sakura">벚꽃</span><br>여행 가이드</h1>
+    <p class="hero-sub">나리타 공항에서 시작되는 2박 3일. 아사쿠사, 디즈니씨, 우에노 벚꽃까지.</p>
+    <div class="hero-chips">
+      <div class="chip"><strong>2박 3일</strong> 금—일</div>
+      <div class="chip">🏠 아사쿠사</div>
+      <div class="chip">🌸 벚꽃 시즌</div>
+    </div>
+  </div>
+  <div class="scroll-cue"><div class="line"></div></div>
+</section>
+
+<!-- ═══ NAV ═══ -->
+<nav class="nav" id="nav">
+  <a href="#overview" class="active">개요</a>
+  <a href="#day1">DAY 1</a>
+  <a href="#day2">DAY 2</a>
+  <a href="#day3">DAY 3</a>
+  <a href="#transport">교통</a>
+  <a href="#packing">준비물</a>
+  <a href="#emergency">긴급</a>
+</nav>
+
+<!-- ═══ OVERVIEW ═══ -->
+<section class="sec fi" id="overview">
+  <div class="sec-label">Overview</div>
+  <h2 class="sec-title">여행 개요</h2>
+  <p class="sec-desc">벚꽃 시즌 도쿄, 핵심만 담은 2박 3일</p>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-card-icon">✈️</div>
+      <div class="info-card-label">출발</div>
+      <div class="info-card-value">3/20 (금)</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">🛬</div>
+      <div class="info-card-label">귀국</div>
+      <div class="info-card-value">3/22 (일)</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">🏠</div>
+      <div class="info-card-label">숙소</div>
+      <div class="info-card-value">아사쿠사 Airbnb</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">🌸</div>
+      <div class="info-card-label">시즌</div>
+      <div class="info-card-value">벚꽃 개화기</div>
+    </div>
+    <div class="info-card full">
+      <div class="info-card-icon">🗺️</div>
+      <div class="info-card-label">주요 방문지</div>
+      <div class="info-card-value">아사쿠사 · 롯폰기 · 도쿄 타워 · 디즈니씨 · 우에노 공원</div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-title">🌸 벚꽃 정보</div>
+    <p>3월 셋째 주는 도쿄 벚꽃 개화 초반이에요. 우에노 공원, 치도리가후치, 메구로 강이 대표 명소. 날씨에 따라 개화 상황이 달라질 수 있으니 출발 전 확인하세요.</p>
+  </div>
+</section>
+
+<div class="div"></div>
+
+<!-- ═══════════════════════════════════ DAY 1 ═══════════════════════════════════ -->
+<section class="sec fi" id="day1">
+  <div class="sec-label">Day 01</div>
+  <h2 class="sec-title">🛬 도착 & Foodie Day</h2>
+  <p class="sec-desc">3월 20일 금요일 — 아사쿠사, 롯폰기, 도쿄 타워</p>
+
+  <div class="day-hdr">
+    <div class="day-badge">20<small>FRI</small></div>
+    <div class="day-meta">
+      <h3>아사쿠사 → 미나토구</h3>
+      <p>도착 후 현지 맛집 탐방 & 도쿄 타워 석양</p>
+    </div>
+  </div>
+
+  <div class="tl">
+
+    <!-- 10:10 -->
+    <div class="tl-item hl">
+      <div class="tl-dot"></div>
+      <div class="tl-time">10:10</div>
+      <div class="tl-title">나리타 공항 도착</div>
+      <div class="tl-loc">NRT 나리타 국제공항</div>
+      <div class="tl-note">입국 수속 및 이동 준비. 차량 픽업 09:00</div>
+      <div class="t-badge">🚗 공항 픽업</div>
+    </div>
+
+    <!-- 12:00 -->
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-time">~12:00</div>
+      <div class="tl-title">공항 → 아사쿠사 이동</div>
+      <div class="tl-loc">스카이라이너 / 케이세이 전철</div>
+      <div class="t-badge">🚆 스카이라이너 ~40분</div>
+    </div>
+
+    <!-- 12:30 -->
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-time">12:30</div>
+      <div class="tl-title">숙소 도착 & 체크인</div>
+      <div class="tl-loc">아사쿠사 Airbnb</div>
+      <div class="tl-note">짐 드롭 후 가벼운 차림으로 외출 준비</div>
+    </div>
+
+    <!-- 13:00 LUNCH with restaurant info -->
+    <div class="tl-item hl">
+      <div class="tl-dot"></div>
+      <div class="tl-time">13:00</div>
+      <div class="tl-title">🍽️ 점심 식사</div>
+      <div class="tl-loc">아사쿠사</div>
+
+      <div class="resto-card">
+        <div class="resto-tag undecided">⏳ 옵션 선택 필요</div>
+        <div class="resto-options">
+          <div class="resto-option">
+            <span class="resto-option-num">01</span>
+            <span><strong>Ichikawa Tempura</strong> (Max 6명) — 자리 최대 6개, 예약 X 11시쯤 오픈런 웨이팅. 한번에 못들어가면 나눠서 먹어야 함</span>
+          </div>
+          <div class="resto-option">
+            <span class="resto-option-num">02</span>
+            <span><strong>장어덮밥 — Komagata Maekawa Asakusa Main Branch</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 13:30 -->
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-time">13:30</div>
+      <div class="tl-title">아사쿠사 → 미나토구 이동</div>
+      <div class="tl-loc">전철 + 도보</div>
+      <div class="t-badge">🚶 전철 + 도보 약 35~40분</div>
+    </div>
+
+    <!-- 15:30 -->
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-time">15:30</div>
+      <div class="tl-title">카페 타임 / 자유 시간</div>
+      <div class="tl-loc">롯폰기</div>
+      <div class="tl-note">메이드 카페 or 원하는 카페에서 휴식</div>
+    </div>
+
+    <!-- 17:15 -->
+    <div class="tl-item hl">
+      <div class="tl-dot"></div>
+      <div class="tl-time">17:15</div>
+      <div class="tl-title">🌅 도쿄 타워 석양</div>
+      <div class="tl-loc">도쿄 타워</div>
+      <div class="tl-note">일몰 시간 맞춰 방문. 사진 타임!</div>
+    </div>
+
+    <!-- 18:00 DINNER with restaurant info -->
+    <div class="tl-item hl">
+      <div class="tl-dot"></div>
+      <div class="tl-time">18:00</div>
+      <div class="tl-title">🍽️ 저녁 식사</div>
+      <div class="tl-loc">긴자</div>
+
+      <div class="resto-card">
+        <div class="resto-tag reserved">✅ 예약 완료</div>
+        <div class="resto-name">바카로 이치다이 긴자</div>
+        <div class="resto-name-jp">Bakaro Ichidai Ginza</div>
+        <div class="resto-details">
+          <div class="resto-row">
+            <span class="resto-row-label">예산</span>
+            <span class="resto-row-value">~8,800엔</span>
+          </div>
+          <div class="resto-row">
+            <span class="resto-row-label">인원</span>
+            <span class="resto-row-value">12인</span>
+          </div>
+          <div class="resto-row">
+            <span class="resto-row-label">상태</span>
+            <span class="resto-row-value" style="color:var(--green)">12인 예약 가능 — 예약 완료</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 20:00 -->
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-time">20:00~</div>
+      <div class="tl-title">핫플 이동 & 야간 자유시간</div>
+      <div class="tl-loc">미나토구 / 주변 핫플레이스</div>
+      <div class="tl-note">술 한잔 즐기고 ~22시쯤 숙소 복귀</div>
+    </div>
+
+  </div>
+</section>
+
+<div class="div"></div>
+
+<!-- ═══════════════════════════════════ DAY 2 ═══════════════════════════════════ -->
+<section class="sec fi" id="day2">
+  <div class="sec-label">Day 02</div>
+  <h2 class="sec-title">🎡 Disney Sea</h2>
+  <p class="sec-desc">3월 21일 토요일 — 디즈니씨 종일 & 우에노 저녁</p>
+
+  <div class="day-hdr">
+    <div class="day-badge">21<small>SAT</small></div>
+    <div class="day-meta">
+      <h3>디즈니씨 풀데이</h3>
+      <p>하루 종일 디즈니씨, 저녁은 우에노 야키토리</p>
+    </div>
+  </div>
+
+  <div class="tl">
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-time">~08:00</div>
+      <div class="tl-title">기상 & 아침 식사</div>
+      <div class="tl-loc">Airbnb</div>
+      <div class="tl-note">디즈니씨 개장 전 도착을 위해 일찍 출발</div>
+    </div>
+
+    <div class="tl-item hl">
+      <div class="tl-dot"></div>
+      <div class="tl-time">09:00</div>
+      <div class="tl-title">🏰 디즈니씨 입장</div>
+      <div class="tl-loc">Tokyo Disney Sea</div>
+      <div class="tl-note">입장권 사전 구매 필수! 주말이라 혼잡 예상</div>
+    </div>
+
+    <!-- LUNCH at Disney - on site -->
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-time">~11:30</div>
+      <div class="tl-title">🍽️ 점심 식사</div>
+      <div class="tl-loc">디즈니씨 내부</div>
+
+      <div class="resto-card">
+        <div class="resto-tag onsite">🎡 현지 결정</div>
+        <div class="resto-name">디즈니씨 내부 레스토랑</div>
+        <div class="resto-details">
+          <div class="resto-row">
+            <span class="resto-row-label">비고</span>
+            <span class="resto-row-value">현장에서 상황 따라 결정</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-time">오후</div>
+      <div class="tl-title">어트랙션 & 쇼 즐기기</div>
+      <div class="tl-loc">Tokyo Disney Sea</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-time">~17:30</div>
+      <div class="tl-title">디즈니씨 출발</div>
+      <div class="tl-loc">우에노 방면 이동</div>
+    </div>
+
+    <!-- DINNER - Yakitori -->
+    <div class="tl-item hl">
+      <div class="tl-dot"></div>
+      <div class="tl-time">저녁</div>
+      <div class="tl-title">🍽️ 저녁 식사</div>
+      <div class="tl-loc">우에노</div>
+
+      <div class="resto-card">
+        <div class="resto-tag reserved">✅ 예약 완료</div>
+        <div class="resto-name">스미비야키토리 쿠시하찐 우에노이리야구치텐</div>
+        <div class="resto-name-jp">Sumibiyakitori Kushihatchin Uenoiriyaguchiten (아키토리)</div>
+        <div class="resto-details">
+          <div class="resto-row">
+            <span class="resto-row-label">인원</span>
+            <span class="resto-row-value">12인</span>
+          </div>
+          <div class="resto-row">
+            <span class="resto-row-label">상태</span>
+            <span class="resto-row-value" style="color:var(--green)">12인 예약 가능 — 예약 완료</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="tip" style="margin-top: 20px;">
+    <div class="tip-title">🎡 디즈니씨 꿀팁</div>
+    <p>토요일은 혼잡합니다. Disney Premier Access(유료 패스트패스) 적극 활용하세요. 인기 어트랙션은 입장 직후 바로 줄서기! 앱 미리 설치하면 대기시간 실시간 확인 가능.</p>
+  </div>
+</section>
+
+<div class="div"></div>
+
+<!-- ═══════════════════════════════════ DAY 3 ═══════════════════════════════════ -->
+<section class="sec fi" id="day3">
+  <div class="sec-label">Day 03</div>
+  <h2 class="sec-title">🌸 벚꽃 & 귀국</h2>
+  <p class="sec-desc">3월 22일 일요일 — 우에노 공원 벚꽃, 스시, 귀국</p>
+
+  <div class="day-hdr">
+    <div class="day-badge">22<small>SUN</small></div>
+    <div class="day-meta">
+      <h3>우에노 벚꽃 → 귀국</h3>
+      <p>벚꽃 산책 → 테판야끼 or 스시 → 공항</p>
+    </div>
+  </div>
+
+  <div class="tl">
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-time">~10:00</div>
+      <div class="tl-title">개인 정비 & 아침 식사</div>
+      <div class="tl-loc">Airbnb</div>
+      <div class="tl-note">체크아웃 준비 (짐 패킹)</div>
+    </div>
+
+    <!-- LUNCH with options -->
+    <div class="tl-item hl">
+      <div class="tl-dot"></div>
+      <div class="tl-time">11:00</div>
+      <div class="tl-title">🍽️ 점심 식사</div>
+      <div class="tl-loc">우에노 공원 근처</div>
+
+      <div class="resto-card">
+        <div class="resto-tag reserved">✅ 옵션1 예약완료</div>
+        <div class="resto-options">
+          <div class="resto-option">
+            <span class="resto-option-num">01</span>
+            <span><strong>테판야끼</strong> — 드카투, 도라미, 허니비, 가투, 베카 선호. 예약완료, 수수료 2,200엔 선지급완</span>
+          </div>
+          <div class="resto-option">
+            <span class="resto-option-num">02</span>
+            <span><strong>도단픽스시</strong> 예산 2,200~3,300엔 — 라임, 찬밥, 라엘, 도단, 동새, 폭냥, 바밀. 대낮부터 어두컴컴한데서 스시먹기</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item hl">
+      <div class="tl-dot"></div>
+      <div class="tl-time">12:00</div>
+      <div class="tl-title">🌸 벚꽃 구경</div>
+      <div class="tl-loc">우에노 공원</div>
+      <div class="tl-note">여행의 하이라이트! 벚꽃 아래에서 사진 촬영</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-time">~15:30</div>
+      <div class="tl-title">자유 시간 → 숙소 복귀</div>
+      <div class="tl-loc">자유 이동</div>
+      <div class="tl-note">⏰ 시간 엄수! 공항 이동 준비</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-time">~17:00</div>
+      <div class="tl-title">아사쿠사 → 나리타 공항</div>
+      <div class="tl-loc">스카이라이너 / 케이세이 전철</div>
+      <div class="t-badge">🚆 스카이라이너 ~40분</div>
+    </div>
+
+    <div class="tl-item hl">
+      <div class="tl-dot"></div>
+      <div class="tl-time">~18:55</div>
+      <div class="tl-title">✈️ 귀국편 출발</div>
+      <div class="tl-loc">나리타 공항 (NRT)</div>
+      <div class="tl-note">여유있게 2시간 전 도착 목표</div>
+    </div>
+
+  </div>
+</section>
+
+<div class="div"></div>
+
+<!-- ═══ TRANSPORT ═══ -->
+<section class="sec fi" id="transport">
+  <div class="sec-label">Transport</div>
+  <h2 class="sec-title">🚆 교통 가이드</h2>
+  <p class="sec-desc">도쿄 시내 이동 핵심 정보</p>
+
+  <div class="info-grid">
+    <div class="info-card full">
+      <div class="info-card-icon">🚆</div>
+      <div class="info-card-label">공항 ↔ 시내</div>
+      <div class="info-card-value">스카이라이너 / 케이세이 액세스</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">💳</div>
+      <div class="info-card-label">교통카드</div>
+      <div class="info-card-value">Suica / Pasmo</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">📱</div>
+      <div class="info-card-label">추천 앱</div>
+      <div class="info-card-value">Google Maps</div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-title">🚆 스카이라이너 vs 케이세이 액세스</div>
+    <p><strong>스카이라이너:</strong> 나리타→우에노 약 40분, ~2,520엔. 빠르고 편리.<br>
+    <strong>케이세이 액세스:</strong> 약 60분, ~1,270엔. 가성비 좋음.</p>
+  </div>
+
+  <div class="tip">
+    <div class="tip-title">💳 Suica 카드 팁</div>
+    <p>전철, 버스, 편의점 결제까지 가능한 만능 교통카드. iPhone이라면 Apple Pay에서 모바일 Suica 설정 가능.</p>
+  </div>
+</section>
+
+<div class="div"></div>
+
+<!-- ═══ PACKING ═══ -->
+<section class="sec fi" id="packing">
+  <div class="sec-label">Checklist</div>
+  <h2 class="sec-title">🧳 준비물 체크리스트</h2>
+  <p class="sec-desc">탭해서 체크하세요</p>
+
+  <ul class="cl" id="cl">
+    <li>여권 & 항공권 (모바일 탑승권)</li>
+    <li>엔화 현금 (소규모 상점용)</li>
+    <li>Suica / Pasmo 교통카드</li>
+    <li>보조배터리 & 충전케이블</li>
+    <li>여행자 보험 가입 확인</li>
+    <li>편한 운동화 (많이 걸어요!)</li>
+    <li>가벼운 겉옷 (3월 아직 쌀쌀)</li>
+    <li>우산 / 우비 (변덕 날씨 대비)</li>
+    <li>디즈니씨 입장권 (사전 구매)</li>
+    <li>포켓 와이파이 / eSIM</li>
+    <li>세면도구 & 개인 위생용품</li>
+    <li>카메라 / 셀카봉</li>
+  </ul>
+</section>
+
+<div class="div"></div>
+
+<!-- ═══ EMERGENCY ═══ -->
+<section class="sec fi" id="emergency">
+  <div class="sec-label">Emergency</div>
+  <h2 class="sec-title">🆘 긴급 연락처</h2>
+  <p class="sec-desc">만약의 상황을 위한 필수 정보</p>
+</section>
+
+<div class="sos-bar" onclick="toggleSos()">
+  <span style="font-size:18px">🚨</span>
+  <div class="sos-bar-text">긴급 연락처 펼치기</div>
+  <span class="sos-bar-arrow" id="sosArrow">▼</span>
+</div>
+<div class="sos-panel" id="sosPanel">
+  <div class="sos-inner">
+    <div class="sos-item">
+      <div class="sos-item-icon">🚔</div>
+      <div><div class="sos-item-label">경찰</div><div class="sos-item-value"><a href="tel:110">110</a></div></div>
+    </div>
+    <div class="sos-item">
+      <div class="sos-item-icon">🚑</div>
+      <div><div class="sos-item-label">소방 / 구급</div><div class="sos-item-value"><a href="tel:119">119</a></div></div>
+    </div>
+    <div class="sos-item">
+      <div class="sos-item-icon">🏥</div>
+      <div><div class="sos-item-label">AMDA 외국인 의료지원</div><div class="sos-item-value"><a href="tel:03-6233-9266">03-6233-9266</a></div></div>
+    </div>
+    <div class="sos-item">
+      <div class="sos-item-icon">🇰🇷</div>
+      <div><div class="sos-item-label">주일 한국대사관</div><div class="sos-item-value"><a href="tel:03-3452-7611">03-3452-7611</a></div></div>
+    </div>
+    <div class="sos-item">
+      <div class="sos-item-icon">📞</div>
+      <div><div class="sos-item-label">관광 안내 (다국어)</div><div class="sos-item-value"><a href="tel:050-3816-2787">050-3816-2787</a></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<div class="foot">
+  <div class="foot-emoji">🗼🌸</div>
+  <p>Tokyo 2025 Travel Guide<br>즐거운 여행 되세요!</p>
+</div>
+
+</div><!-- /mobile-wrap -->
+
+<script>
+  // Checklist
+  document.querySelectorAll('.cl li').forEach(li => {
+    li.addEventListener('click', () => li.classList.toggle('checked'));
+  });
+
+  // SOS panel
+  function toggleSos() {
+    const p = document.getElementById('sosPanel');
+    const a = document.getElementById('sosArrow');
+    p.classList.toggle('open');
+    a.textContent = p.classList.contains('open') ? '▲' : '▼';
+  }
+
+  // Scroll fade
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+
+  // Active nav
+  const secs = document.querySelectorAll('.sec[id]');
+  const tabs = document.querySelectorAll('.nav a');
+  const navObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tabs.forEach(t => t.classList.remove('active'));
+        const t = document.querySelector(`.nav a[href="#${e.target.id}"]`);
+        if (t) t.classList.add('active');
+      }
+    });
+  }, { threshold: 0.25 });
+  secs.forEach(s => navObs.observe(s));
+</script>
+</body>
+</html>
