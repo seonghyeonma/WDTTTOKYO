@@ -686,26 +686,69 @@
     font-weight: 600;
   }
 
-  .expense-card-delete {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 22px;
-    height: 22px;
+  .expense-card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+
+  .btn-expense-action {
+    flex: 1;
+    padding: 10px 8px;
     border: none;
-    background: rgba(255,59,92,0.1);
-    color: var(--accent);
-    border-radius: 50%;
+    border-radius: var(--r-sm);
     font-size: 12px;
+    font-weight: 700;
+    font-family: inherit;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0.5;
-    transition: opacity .2s;
+    gap: 5px;
+    transition: all .2s;
+    min-height: 40px;
   }
 
-  .expense-card-delete:hover { opacity: 1; }
+  .btn-expense-delete {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+  }
+
+  .btn-expense-delete:active {
+    background: rgba(255,255,255,0.2);
+  }
+
+  .btn-expense-settle {
+    background: rgba(59,130,246,0.2);
+    color: #60A5FA;
+  }
+
+  .btn-expense-settle:active {
+    background: rgba(59,130,246,0.35);
+  }
+
+  .btn-expense-settle.done {
+    background: rgba(59,130,246,0.08);
+    color: rgba(96,165,250,0.5);
+  }
+
+  /* Settled (completed) card */
+  .expense-card.settled .expense-card-title,
+  .expense-card.settled .expense-card-amount {
+    text-decoration: line-through;
+    opacity: 0.4;
+  }
+
+  .expense-card.settled .expense-card-meta,
+  .expense-card.settled .expense-card-split {
+    opacity: 0.3;
+  }
+
+  .expense-card.settled {
+    border-color: rgba(59,130,246,0.15);
+  }
 
   .settle-summary {
     background: linear-gradient(135deg, rgba(52,199,89,0.06), rgba(255,59,92,0.04));
@@ -1436,7 +1479,17 @@
     renderExpenses();
   }
 
+  function toggleSettleExpense(id) {
+    const exp = expenses.find(e => e.id === id);
+    if (exp) {
+      exp.settled = !exp.settled;
+      saveExpenses();
+      renderExpenses();
+    }
+  }
+
   function deleteExpense(id) {
+    if (!confirm('이 내역을 삭제할까요?')) return;
     expenses = expenses.filter(e => e.id !== id);
     saveExpenses();
     renderExpenses();
@@ -1450,8 +1503,7 @@
 
     // Render expense cards
     list.innerHTML = expenses.map(e => `
-      <div class="expense-card">
-        <button class="expense-card-delete" onclick="deleteExpense(${e.id})">✕</button>
+      <div class="expense-card${e.settled ? ' settled' : ''}">
         <div class="expense-card-header">
           <div>
             <div class="expense-card-title">${e.desc}</div>
@@ -1465,6 +1517,10 @@
         <div class="expense-card-split">
           ${e.split.map(m => `<span class="split-chip${m === e.payer ? ' payer' : ''}">${m}</span>`).join('')}
         </div>
+        <div style="display:flex;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.06)">
+          <button style="flex:1;padding:10px;border:none;border-radius:10px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;min-height:40px;background:${e.settled ? 'rgba(59,130,246,0.08)' : 'rgba(59,130,246,0.2)'};color:${e.settled ? 'rgba(96,165,250,0.5)' : '#60A5FA'}" onclick="toggleSettleExpense(${e.id})">${e.settled ? '✓ 정산완료' : '💸 정산완료'}</button>
+          <button style="flex:1;padding:10px;border:none;border-radius:10px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;min-height:40px;background:rgba(255,255,255,0.12);color:#fff" onclick="deleteExpense(${e.id})">삭제</button>
+        </div>
       </div>
     `).join('');
 
@@ -1472,11 +1528,11 @@
     const total = expenses.reduce((s, e) => s + e.amount, 0);
     totalEl.textContent = `¥${total.toLocaleString()}`;
 
-    // Calculate settlements
+    // Calculate settlements (exclude settled expenses)
     const balances = {};
     MEMBERS.forEach(m => balances[m] = 0);
 
-    expenses.forEach(e => {
+    expenses.filter(e => !e.settled).forEach(e => {
       const perPerson = e.amount / e.split.length;
       balances[e.payer] = (balances[e.payer] || 0) + e.amount;
       e.split.forEach(m => {
@@ -1525,6 +1581,7 @@
       `).join('');
     }
   }
+
 
   initChips();
   renderExpenses();
