@@ -1517,9 +1517,9 @@
         <div class="expense-card-split">
           ${e.split.map(m => `<span class="split-chip${m === e.payer ? ' payer' : ''}">${m}</span>`).join('')}
         </div>
-        <div class="expense-card-actions">
-          <button class="btn-expense-action btn-expense-settle${e.settled ? ' done' : ''}" onclick="toggleSettleExpense(${e.id})">${e.settled ? '✓ 정산완료' : '💸 정산완료'}</button>
-          <button class="btn-expense-action btn-expense-delete" onclick="deleteExpense(${e.id})">삭제</button>
+        <div style="display:flex;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.06)">
+          <button style="flex:1;padding:10px;border:none;border-radius:10px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;min-height:40px;background:${e.settled ? 'rgba(59,130,246,0.08)' : 'rgba(59,130,246,0.2)'};color:${e.settled ? 'rgba(96,165,250,0.5)' : '#60A5FA'}" onclick="toggleSettleExpense(${e.id})">${e.settled ? '✓ 정산완료' : '💸 정산완료'}</button>
+          <button style="flex:1;padding:10px;border:none;border-radius:10px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;min-height:40px;background:rgba(255,255,255,0.12);color:#fff" onclick="deleteExpense(${e.id})">삭제</button>
         </div>
       </div>
     `).join('');
