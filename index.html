@@ -688,41 +688,66 @@
 
   .expense-card-actions {
     display: flex;
-    gap: 6px;
-    margin-top: 8px;
-    padding-top: 8px;
+    gap: 8px;
+    margin-top: 10px;
+    padding-top: 10px;
     border-top: 1px solid var(--border);
   }
 
   .btn-expense-action {
     flex: 1;
-    padding: 8px;
-    border: 1px solid var(--border-light);
+    padding: 10px 8px;
+    border: none;
     border-radius: var(--r-sm);
-    font-size: 11px;
-    font-weight: 600;
+    font-size: 12px;
+    font-weight: 700;
     font-family: inherit;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 5px;
     transition: all .2s;
+    min-height: 40px;
   }
 
   .btn-expense-delete {
-    background: rgba(255,59,92,0.12);
-    color: var(--accent);
-    border-color: rgba(255,59,92,0.3);
+    background: rgba(255,255,255,0.12);
+    color: #fff;
   }
 
   .btn-expense-delete:active {
-    background: rgba(255,59,92,0.25);
+    background: rgba(255,255,255,0.2);
   }
 
-  /* Swipe-to-reveal fallback: long-press hint */
-  .expense-card-actions button {
-    min-height: 36px;
+  .btn-expense-settle {
+    background: rgba(59,130,246,0.2);
+    color: #60A5FA;
+  }
+
+  .btn-expense-settle:active {
+    background: rgba(59,130,246,0.35);
+  }
+
+  .btn-expense-settle.done {
+    background: rgba(59,130,246,0.08);
+    color: rgba(96,165,250,0.5);
+  }
+
+  /* Settled (completed) card */
+  .expense-card.settled .expense-card-title,
+  .expense-card.settled .expense-card-amount {
+    text-decoration: line-through;
+    opacity: 0.4;
+  }
+
+  .expense-card.settled .expense-card-meta,
+  .expense-card.settled .expense-card-split {
+    opacity: 0.3;
+  }
+
+  .expense-card.settled {
+    border-color: rgba(59,130,246,0.15);
   }
 
   .settle-summary {
@@ -751,51 +776,6 @@
   }
 
   .settle-row:last-child { border-bottom: none; }
-
-  .settle-row {
-    cursor: pointer;
-    user-select: none;
-    transition: opacity .2s;
-  }
-
-  .settle-row.settled {
-    opacity: 0.4;
-  }
-
-  .settle-row.settled .settle-from,
-  .settle-row.settled .settle-to,
-  .settle-row.settled .settle-amt {
-    text-decoration: line-through;
-  }
-
-  .settle-check {
-    width: 16px;
-    height: 16px;
-    border: 2px solid var(--text-muted);
-    border-radius: 4px;
-    flex-shrink: 0;
-    transition: all .2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-  }
-
-  .settle-row.settled .settle-check {
-    background: var(--green);
-    border-color: var(--green);
-    color: #fff;
-  }
-
-  .settle-done-label {
-    display: none;
-    font-size: 9px;
-    color: var(--green);
-    font-weight: 600;
-    letter-spacing: .5px;
-  }
-
-  .settle-row.settled .settle-done-label { display: inline; }
 
   .settle-from { color: var(--text-sub); font-weight: 500; }
   .settle-arrow { color: var(--text-muted); font-size: 10px; }
@@ -1499,6 +1479,15 @@
     renderExpenses();
   }
 
+  function toggleSettleExpense(id) {
+    const exp = expenses.find(e => e.id === id);
+    if (exp) {
+      exp.settled = !exp.settled;
+      saveExpenses();
+      renderExpenses();
+    }
+  }
+
   function deleteExpense(id) {
     if (!confirm('이 내역을 삭제할까요?')) return;
     expenses = expenses.filter(e => e.id !== id);
@@ -1514,7 +1503,7 @@
 
     // Render expense cards
     list.innerHTML = expenses.map(e => `
-      <div class="expense-card">
+      <div class="expense-card${e.settled ? ' settled' : ''}">
         <div class="expense-card-header">
           <div>
             <div class="expense-card-title">${e.desc}</div>
@@ -1529,7 +1518,8 @@
           ${e.split.map(m => `<span class="split-chip${m === e.payer ? ' payer' : ''}">${m}</span>`).join('')}
         </div>
         <div class="expense-card-actions">
-          <button class="btn-expense-action btn-expense-delete" onclick="deleteExpense(${e.id})">🗑 삭제</button>
+          <button class="btn-expense-action btn-expense-settle${e.settled ? ' done' : ''}" onclick="toggleSettleExpense(${e.id})">${e.settled ? '✓ 정산완료' : '💸 정산완료'}</button>
+          <button class="btn-expense-action btn-expense-delete" onclick="deleteExpense(${e.id})">삭제</button>
         </div>
       </div>
     `).join('');
@@ -1538,11 +1528,11 @@
     const total = expenses.reduce((s, e) => s + e.amount, 0);
     totalEl.textContent = `¥${total.toLocaleString()}`;
 
-    // Calculate settlements
+    // Calculate settlements (exclude settled expenses)
     const balances = {};
     MEMBERS.forEach(m => balances[m] = 0);
 
-    expenses.forEach(e => {
+    expenses.filter(e => !e.settled).forEach(e => {
       const perPerson = e.amount / e.split.length;
       balances[e.payer] = (balances[e.payer] || 0) + e.amount;
       e.split.forEach(m => {
@@ -1581,38 +1571,17 @@
     if (settlements.length === 0) {
       summaryEl.innerHTML = '<div class="settle-empty">아직 등록된 내역이 없어요</div>';
     } else {
-      const settledMap = JSON.parse(localStorage.getItem('tokyoSettled') || '{}');
-      summaryEl.innerHTML = settlements.map(s => {
-        const key = `${s.from}→${s.to}`;
-        const done = settledMap[key] ? ' settled' : '';
-        return `
-        <div class="settle-row${done}" onclick="toggleSettle(this, '${key}')">
-          <span class="settle-check">${settledMap[key] ? '✓' : ''}</span>
+      summaryEl.innerHTML = settlements.map(s => `
+        <div class="settle-row">
           <span class="settle-from">${s.from}</span>
           <span class="settle-arrow">→</span>
           <span class="settle-to">${s.to}</span>
-          <span class="settle-done-label">완료</span>
           <span class="settle-amt">¥${s.amount.toLocaleString()}</span>
-        </div>`;
-      }).join('');
+        </div>
+      `).join('');
     }
   }
 
-  function toggleSettle(el, key) {
-    const settledMap = JSON.parse(localStorage.getItem('tokyoSettled') || '{}');
-    if (settledMap[key]) {
-      delete settledMap[key];
-      el.classList.remove('settled');
-      el.querySelector('.settle-check').textContent = '';
-      el.querySelector('.settle-done-label').style.display = 'none';
-    } else {
-      settledMap[key] = true;
-      el.classList.add('settled');
-      el.querySelector('.settle-check').textContent = '✓';
-      el.querySelector('.settle-done-label').style.display = 'inline';
-    }
-    localStorage.setItem('tokyoSettled', JSON.stringify(settledMap));
-  }
 
   initChips();
   renderExpenses();
